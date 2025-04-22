@@ -75,8 +75,8 @@ const MainLayout = () => {
               <h4 className="font-semibold">Resources</h4>
               <ul className="space-y-2">
                 {/* <li>
-                  <Link to="/what-is-neuralwired" className="text-muted-foreground hover:text-primary text-sm">
-                    What is NeuralWired
+                  <Link to="/what-is-quantummindsclub" className="text-muted-foreground hover:text-primary text-sm">
+                    What is quantummindsclub
                   </Link>
                 </li> */}
                 <li>

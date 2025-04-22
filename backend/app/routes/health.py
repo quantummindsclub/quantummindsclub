@@ -7,7 +7,7 @@ bp = Blueprint('health', __name__, url_prefix='/health')
 def health_check():
     return jsonify({
         'status': 'ok',
-        'service': 'neuralwired-backend',
+        'service': 'quantummindsclub-backend',
     })
 
 @bp.route('/db', methods=['GET'])
