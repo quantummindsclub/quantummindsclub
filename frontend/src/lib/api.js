@@ -18,7 +18,7 @@ export const queryClient = new QueryClient({
 
 const getApiBaseUrl = () => {
   if (import.meta.env.PROD) {
-    return import.meta.env.VITE_API_URL || 'https://rulercosta.onrender.com';
+    return import.meta.env.VITE_API_URL || 'https://quantummindsapi.onrender.com';
   }
   
   return import.meta.env.VITE_API_URL || 'http://localhost:5000';
