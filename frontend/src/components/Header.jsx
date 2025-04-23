@@ -3,7 +3,7 @@ import { Link, useNavigate, useLocation } from 'react-router-dom'
 import { useAuth } from '../contexts/AuthContext'
 import { useTheme } from './theme-provider'
 import { Button } from './ui/button'
-import { Moon, Sun, LayoutDashboard, Menu, X } from 'lucide-react'
+import { Moon, Sun, Menu, X } from 'lucide-react'
 
 const Header = () => {
   const { isAuthenticated } = useAuth()
@@ -100,18 +100,6 @@ const Header = () => {
           >
             {theme === 'light' ? <Moon className="h-5 w-5" /> : <Sun className="h-5 w-5" />}
           </Button>
-          
-          {isAuthenticated && (
-            <Button 
-              variant="ghost"
-              size="icon"
-              onClick={() => navigate('/admin')}
-              title="Admin Dashboard"
-              className="hover:bg-muted"
-            >
-              <LayoutDashboard className="h-5 w-5" />
-            </Button>
-          )}
         </div>
       </div>
       

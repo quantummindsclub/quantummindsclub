@@ -29,7 +29,7 @@ const LoginPage = () => {
   }, [cooldownTime, isRateLimited]);
 
   if (isAuthenticated) {
-    return <Navigate to="/" replace />
+    return <Navigate to="/admin" replace />
   }
 
   const handleSubmit = async (e) => {
@@ -46,7 +46,7 @@ const LoginPage = () => {
     setIsLoading(false)
     
     if (result.success) {
-      navigate('/')
+      navigate('/admin')
     } else {
       if (result.isRateLimited) {
         setIsRateLimited(true)
