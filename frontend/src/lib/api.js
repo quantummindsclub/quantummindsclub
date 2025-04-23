@@ -72,8 +72,9 @@ export const handleAuthTimeout = () => {
 
 export async function apiGet(endpoint, options = {}) {
   try {
-    const response = await fetch(import.meta.env.VITE_API_URL + endpoint, {
-      credentials: 'include'
+    const response = await apiRequest(endpoint, {
+      ...options,
+      method: 'GET'
     });
     
     if (response.status === 401) {
