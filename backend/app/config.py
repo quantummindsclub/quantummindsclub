@@ -15,7 +15,13 @@ class Config:
     SESSION_COOKIE_SECURE = True
     SESSION_COOKIE_HTTPONLY = True
     SESSION_COOKIE_SAMESITE = 'None'
-    SESSION_TYPE = 'filesystem'
+    
+    SESSION_TYPE = 'redis'
+    SESSION_REDIS_HOST = os.environ.get('REDIS_HOST', 'localhost')
+    SESSION_REDIS_PORT = int(os.environ.get('REDIS_PORT', 6379))
+    SESSION_REDIS_PASSWORD = os.environ.get('REDIS_PASSWORD', None)
+    SESSION_REDIS_SSL = os.environ.get('REDIS_SSL', 'False').lower() == 'true'
+    SESSION_USE_SIGNER = True
 
 class DevelopmentConfig(Config):
     DEBUG = True

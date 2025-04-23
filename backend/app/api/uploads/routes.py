@@ -4,7 +4,7 @@ from werkzeug.utils import secure_filename
 from app.api.auth.routes import login_required
 import cloudinary
 import cloudinary.uploader
-from app.utils.helpers import get_uploaded_files, delete_uploaded_file, save_uploaded_image
+from app.utils.cloudinary_utils import get_uploaded_files, delete_uploaded_file, save_uploaded_image
 from app.models.database import db, GalleryImage
 from . import bp
 

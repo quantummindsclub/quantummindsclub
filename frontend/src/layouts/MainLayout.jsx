@@ -5,7 +5,7 @@ import { Instagram, Linkedin, Twitter, Heart } from 'lucide-react'
 import { apiGet } from '../lib/api'
 
 const MainLayout = () => {
-  const [settings, setSettings] = useState({
+  const [socialUrls, setSocialUrls] = useState({
     instagram_url: '',
     linkedin_url: '',
     twitter_url: ''
@@ -13,20 +13,20 @@ const MainLayout = () => {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    const fetchSettings = async () => {
+    const fetchSocialUrls = async () => {
       try {
-        const response = await apiGet('/api/settings')
-        if (!response.ok) throw new Error('Failed to fetch settings')
+        const response = await apiGet('/api/social')
+        if (!response.ok) throw new Error('Failed to fetch social URLs')
         const data = await response.json()
-        setSettings(data)
+        setSocialUrls(data)
       } catch (error) {
-        console.error('Error fetching settings:', error)
+        console.error('Error fetching social URLs:', error)
       } finally {
         setLoading(false)
       }
     }
 
-    fetchSettings()
+    fetchSocialUrls()
   }, [])
 
   return (
@@ -106,7 +106,7 @@ const MainLayout = () => {
               <h4 className="font-semibold">Connect</h4>
               <div className="flex space-x-4">
                 <a 
-                  href={settings.instagram_url || "https://instagram.com"} 
+                  href={socialUrls.instagram_url || "https://instagram.com"} 
                   target="_blank" 
                   rel="noopener noreferrer"
                   className="text-foreground hover:text-primary transition-colors"
@@ -115,7 +115,7 @@ const MainLayout = () => {
                   <Instagram size={20} />
                 </a>
                 <a 
-                  href={settings.linkedin_url || "https://linkedin.com"} 
+                  href={socialUrls.linkedin_url || "https://linkedin.com"} 
                   target="_blank" 
                   rel="noopener noreferrer"
                   className="text-foreground hover:text-primary transition-colors"
@@ -124,7 +124,7 @@ const MainLayout = () => {
                   <Linkedin size={20} />
                 </a>
                 <a 
-                  href={settings.twitter_url || "https://twitter.com"} 
+                  href={socialUrls.twitter_url || "https://twitter.com"} 
                   target="_blank" 
                   rel="noopener noreferrer"
                   className="text-foreground hover:text-primary transition-colors"

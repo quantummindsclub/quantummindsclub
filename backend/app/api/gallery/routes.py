@@ -1,7 +1,7 @@
 from flask import jsonify, request
 from app.models.database import db, GalleryImage
 from app.api.auth.routes import login_required
-from app.utils.helpers import delete_uploaded_file, update_image_metadata
+from app.utils.cloudinary_utils import delete_uploaded_file, update_image_metadata
 from . import bp
 
 @bp.route('/test', methods=['GET'])

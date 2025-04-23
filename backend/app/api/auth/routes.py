@@ -3,6 +3,8 @@ from functools import wraps
 from . import bp
 from app.models.database import db, AdminCredential
 from werkzeug.security import check_password_hash, generate_password_hash
+from app.utils.limiter_utils import limiter
+from app.utils.redis_utils import get_redis_client
 
 def login_required(view):
     @wraps(view)
@@ -13,6 +15,7 @@ def login_required(view):
     return wrapped_view
 
 @bp.route('/login', methods=['POST'])
+@limiter.limit("10 per minute, 30 per hour")
 def login():
     if not request.is_json:
         return jsonify({"error": "Missing JSON"}), 400
@@ -21,7 +24,35 @@ def login():
     
     if not data or 'username' not in data or 'password' not in data:
         return jsonify({"error": "Missing username or password"}), 400
+    
+    client_ip = request.remote_addr
+    redis_client = get_redis_client()
+    
+    if data.get('username') == 'admin':
+        admin_attempt_key = f"login:admin:{client_ip}"
+        admin_attempt_count = redis_client.get(admin_attempt_key)
+        admin_attempt_count = int(admin_attempt_count) if admin_attempt_count else 0
         
+        if admin_attempt_count >= 5:  
+            redis_client.incr(admin_attempt_key)
+            redis_client.expire(admin_attempt_key, 60 * 30)  
+            
+            redis_client.sadd("potential_malicious_ips", client_ip)
+            current_app.logger.warning(f"Potential brute force attack from IP: {client_ip}")
+            
+            return jsonify({
+                "error": "Too many failed login attempts. Try again later."
+            }), 429
+    
+    ip_key = f"login:ip:{client_ip}"
+    ip_attempt_count = redis_client.get(ip_key)
+    ip_attempt_count = int(ip_attempt_count) if ip_attempt_count else 0
+    
+    if ip_attempt_count >= 15:  
+        return jsonify({
+            "error": "Too many login attempts. Please try again later."
+        }), 429
+    
     admin = AdminCredential.query.filter_by(username=data['username']).first()
     
     if admin and check_password_hash(admin.password_hash, data['password']):
@@ -30,11 +61,24 @@ def login():
         session['logged_in'] = True
         session['user_id'] = admin.username
         
+        redis_client.delete(f"login:ip:{client_ip}")
+        if data.get('username') == 'admin':
+            redis_client.delete(f"login:admin:{client_ip}")
+        
         response = make_response(jsonify({"success": True, "message": "Login successful"}))
         
-        current_app.logger.info(f"User {admin.username} logged in successfully")
+        current_app.logger.info(f"Admin logged in successfully from IP: {client_ip}")
         return response
-        
+    
+    redis_client.incr(ip_key)
+    redis_client.expire(ip_key, 60 * 60)  
+    
+    if data.get('username') == 'admin':
+        admin_key = f"login:admin:{client_ip}"
+        redis_client.incr(admin_key)
+        redis_client.expire(admin_key, 60 * 60 * 2)  
+    
+    current_app.logger.warning(f"Failed login attempt from IP: {client_ip}, username: {data.get('username')}")
     return jsonify({"error": "Invalid credentials"}), 401
 
 @bp.route('/logout', methods=['POST'])

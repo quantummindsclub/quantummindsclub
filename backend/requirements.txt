@@ -73,3 +73,5 @@ yarl==1.18.3
 Pillow
 qrcode
 reportlab
+redis
+Flask-Session

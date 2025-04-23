@@ -1,8 +1,11 @@
 import os
 from flask import Flask
 from flask_cors import CORS
+from flask_session import Session
+from redis import Redis
 from .config import config
 from app.models.database import init_app as init_db_app
+from app.utils.limiter_utils import init_limiter
 
 def create_app(config_name='default'):
     app = Flask(__name__, instance_relative_config=True)
@@ -19,6 +22,19 @@ def create_app(config_name='default'):
          expose_headers=["Access-Control-Allow-Origin"],
          methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"],
          vary_header=True)
+    
+    if app.config['SESSION_TYPE'] == 'redis':
+        app.config['SESSION_REDIS'] = Redis(
+            host=app.config['SESSION_REDIS_HOST'],
+            port=app.config['SESSION_REDIS_PORT'],
+            password=app.config['SESSION_REDIS_PASSWORD'],
+            ssl=app.config['SESSION_REDIS_SSL']
+        )
+        app.logger.info(f"Configured Redis session storage with host: {app.config['SESSION_REDIS_HOST']}")
+    
+    Session(app)
+    
+    init_limiter(app)
     
     @app.after_request
     def add_vary_header(response):

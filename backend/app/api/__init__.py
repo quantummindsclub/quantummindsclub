@@ -13,6 +13,7 @@ from app.api.contact import bp as contact_bp
 from app.api.events import bp as events_bp
 from app.api.emails import bp as emails_bp
 from app.api.health import bp as health_bp
+from app.api.social import bp as social_bp
 
 bp.register_blueprint(auth_bp, url_prefix='/auth')
 bp.register_blueprint(pages_bp, url_prefix='/pages')
@@ -25,6 +26,7 @@ bp.register_blueprint(contact_bp, url_prefix='/contact')
 bp.register_blueprint(events_bp, url_prefix='/events')
 bp.register_blueprint(emails_bp, url_prefix='/emails')
 bp.register_blueprint(health_bp, url_prefix='/health')
+bp.register_blueprint(social_bp, url_prefix='/social')
 
 def register_api_blueprints(app):
     app.register_blueprint(bp)

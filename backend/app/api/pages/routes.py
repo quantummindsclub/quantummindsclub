@@ -3,7 +3,7 @@ from sqlalchemy import desc
 from sqlalchemy.exc import SQLAlchemyError
 from app.models.database import db, Page, Comment, Setting
 from app.api.auth.routes import login_required
-from app.utils.helpers import slugify, generate_excerpt, extract_first_image_url
+from app.utils.cloudinary_utils import slugify, generate_excerpt, extract_first_image_url
 from . import bp
 import datetime
 
