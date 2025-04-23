@@ -11,13 +11,20 @@ def create_app(config_name='default'):
     os.makedirs(app.instance_path, exist_ok=True)
     
     cors_origins = app.config['CORS_ORIGINS']
-    app.logger.info(f"CORS configured for origins: {cors_origins}")
-    
+
     CORS(app, 
-         resources={r"/api/*": {"origins": cors_origins}},
+         resources={r"/*": {"origins": cors_origins}}, 
          supports_credentials=True,
-         allow_headers=["Content-Type", "Authorization", "Accept"],
-         methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"])
+         allow_headers=["Content-Type", "Authorization", "Accept", "X-Requested-With"],
+         expose_headers=["Access-Control-Allow-Origin"],
+         methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+         vary_header=True)
+    
+    @app.route('/', defaults={'path': ''}, methods=['OPTIONS'])
+    @app.route('/<path:path>', methods=['OPTIONS'])
+    def preflight_handler(path):
+        response = app.make_default_options_response()
+        return response
     
     init_db_app(app)
     

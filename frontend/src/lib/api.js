@@ -33,12 +33,23 @@ export async function apiRequest(endpoint, options = {}) {
     ...options,
     credentials: 'include',
     headers: {
+      'Accept': 'application/json',
       ...options.headers,
-    }
+    },
+    mode: 'cors' 
   };
   
   try {
     const response = await fetch(url, finalOptions);
+    
+    if (import.meta.env.DEV) {
+      const headerEntries = Array.from(response.headers.entries())
+        .filter(entry => entry[0].toLowerCase().includes('access-control') ||
+                          entry[0].toLowerCase().includes('cors'));
+      if (headerEntries.length > 0) {
+        console.debug('CORS Headers:', Object.fromEntries(headerEntries));
+      }
+    }
     
     if (!response.ok) {
       let errorData;
@@ -50,11 +61,18 @@ export async function apiRequest(endpoint, options = {}) {
           errorData = await response.text();
         }
       } catch (parseError) {
+        console.error('Error parsing response:', parseError);
       }
     }
     
     return response;
   } catch (error) {
+    console.error(`API Request Error (${url}):`, error);
+    
+    if (error instanceof TypeError && error.message === 'Failed to fetch') {
+      console.warn('Possible CORS error - check server configuration and network');
+    }
+    
     throw error;
   }
 }
