@@ -4,19 +4,33 @@ import Header from '../components/Header'
 import { Instagram, Linkedin, Twitter, Heart } from 'lucide-react'
 import { apiGet } from '../lib/api'
 
+const DEFAULT_SOCIAL_URLS = {
+  instagram_url: 'https://instagram.com/quantummindsclub',
+  linkedin_url: 'https://linkedin.com/company/quantummindssociety',
+  twitter_url: 'https://twitter.com/QuantumMindsOnX'
+}
+
 const MainLayout = () => {
-  const [socialUrls, setSocialUrls] = useState({
-    instagram_url: '',
-    linkedin_url: '',
-    twitter_url: ''
-  })
+  const [socialUrls, setSocialUrls] = useState(DEFAULT_SOCIAL_URLS)
   const [loading, setLoading] = useState(true)
+  const [socialFetchAttempted, setSocialFetchAttempted] = useState(false)
 
   useEffect(() => {
+    if (socialFetchAttempted) return;
+    
     const fetchSocialUrls = async () => {
       try {
+        setSocialFetchAttempted(true)
         const response = await apiGet('/api/social')
-        if (!response.ok) throw new Error('Failed to fetch social URLs')
+        
+        if (!response.ok) {
+          if (response.status === 429) {
+            console.warn('Rate limit hit for social URLs API, using defaults')
+            return
+          }
+          throw new Error('Failed to fetch social URLs')
+        }
+        
         const data = await response.json()
         setSocialUrls(data)
       } catch (error) {
@@ -27,7 +41,7 @@ const MainLayout = () => {
     }
 
     fetchSocialUrls()
-  }, [])
+  }, [socialFetchAttempted])
 
   return (
     <div className="flex min-h-screen flex-col main-layout">

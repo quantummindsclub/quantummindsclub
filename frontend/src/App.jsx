@@ -35,41 +35,6 @@ import ContactReplyPage from './pages/ContactReplyPage'
 import EventAchievementPage from './pages/events/EventAchievementPage'
 
 function App() {
-  const [isLoading, setIsLoading] = useState(true)
-  const { toast } = useToast()
-  const navigate = useNavigate()
-
-  useEffect(() => {
-    const checkAuthStatus = async () => {
-      try {
-        setIsLoading(true)
-        const response = await apiGet('/api/auth/status')
-        if (!response.ok) throw new Error('Failed to check authentication status')
-        
-        const data = await response.json()
-        setIsLoading(false)
-      } catch (error) {
-        console.error('Auth check error:', error)
-        toast({
-          variant: "destructive",
-          title: "Error",
-          description: "Failed to check authentication status. Please try again.",
-        })
-        setIsLoading(false)
-      }
-    }
-
-    checkAuthStatus()
-  }, [toast])
-
-  if (isLoading) {
-    return (
-      <div className="flex h-screen items-center justify-center">
-        <div className="h-8 w-8 animate-spin rounded-full border-b-2 border-primary"></div>
-      </div>
-    )
-  }
-
   return (
     <QueryClientProvider client={queryClient}>
       <AuthProvider>

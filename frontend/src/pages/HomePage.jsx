@@ -15,16 +15,7 @@ import { useMediaQuery } from '../lib/utils'
 import { Spinner } from '../components/ui/spinner'
 
 const HomePage = () => {
-  const { data: settings = {}, isLoading: settingsLoading } = useQuery({
-    queryKey: ['settings'],
-    queryFn: async () => {
-      const response = await apiGet('/api/settings');
-      if (!response?.ok) throw new Error('Failed to fetch settings');
-      return response.json();
-    },
-    staleTime: 1000 * 60 * 30,  
-    cacheTime: 1000 * 60 * 60,  
-  });
+  const settings = {}; 
 
   const { data: featuredPosts = [], isLoading: postsLoading } = useQuery({
     queryKey: ['featured-posts'],

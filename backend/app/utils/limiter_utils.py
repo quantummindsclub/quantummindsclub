@@ -15,23 +15,23 @@ if os.environ.get('REDIS_SSL', 'False').lower() == 'true':
 limiter = Limiter(
     key_func=get_remote_address,
     storage_uri=redis_uri,
-    default_limits=["200 per day", "50 per hour"]
+    default_limits=[] 
 )
 
 def init_limiter(app):
     """Initialize the rate limiter with the Flask app"""
     try:
         limiter.init_app(app)
-        app.logger.info("Rate limiter initialized with Upstash Redis storage")
+        app.logger.info("Rate limiter initialized with Upstash Redis storage - Only /login endpoint is rate limited")
     except Exception as e:
         app.logger.error(f"Failed to initialize rate limiter with Redis: {str(e)}")
         memory_limiter = Limiter(
             key_func=get_remote_address,
             storage_uri="memory://",
-            default_limits=["200 per day", "50 per hour"]
+            default_limits=[] 
         )
         memory_limiter.init_app(app)
-        app.logger.warning("Rate limiter initialized with memory storage as fallback")
+        app.logger.warning("Rate limiter initialized with memory storage as fallback - Only /login endpoint is rate limited")
         return memory_limiter
     
     return limiter
