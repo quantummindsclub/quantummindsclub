@@ -385,7 +385,7 @@ def send_participant_emails(event_id):
         for p in participants:
             if not p.email:
                 continue
-            achievement_url = f"https://quantummindsclub.onrender.com/events/{event_id}+{p.college_code}+{p.student_id}"
+            achievement_url = f"https://quantumminds.vercel.app/events/{event_id}+{p.college_code}+{p.student_id}"
             personalized_message = message.replace("{event_name}", event.name)
             personalized_message = personalized_message.replace("{event_date}", event.event_date)
             personalized_message = personalized_message.replace("{achievement_url}", achievement_url)
@@ -464,7 +464,7 @@ def download_certificate():
             date_str = f"Date of completion: {data['event_date']}"
         draw.text((1722, 1384), date_str, fill="black", font=fonts['date'])
 
-        qr_data = f"https://quantummindsclub.onrender.com/events/{data['event_id']}+{data['college_code']}+{data['student_id']}"
+        qr_data = f"https://quantumminds.vercel.app/events/{data['event_id']}+{data['college_code']}+{data['student_id']}"
         qr = qrcode.QRCode(
             version=1,
             error_correction=qrcode.constants.ERROR_CORRECT_L,

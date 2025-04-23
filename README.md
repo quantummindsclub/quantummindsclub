@@ -1,1 +1,1 @@
-# [quantummindsclub](https://quantummindsclub.onrender.com/)
+# [quantummindsclub](https://quantumminds.vercel.app/)
