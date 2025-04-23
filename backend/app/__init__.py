@@ -20,6 +20,12 @@ def create_app(config_name='default'):
          methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"],
          vary_header=True)
     
+    @app.after_request
+    def add_vary_header(response):
+        if 'Origin' not in response.headers.get('Vary', ''):
+            response.headers.add('Vary', 'Origin')
+        return response
+    
     @app.route('/', defaults={'path': ''}, methods=['OPTIONS'])
     @app.route('/<path:path>', methods=['OPTIONS'])
     def preflight_handler(path):
