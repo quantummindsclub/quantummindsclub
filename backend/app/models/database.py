@@ -159,6 +159,32 @@ class GalleryImage(db.Model):
             return True
         return False
 
+class SentEmail(db.Model):
+    __tablename__ = "sent_emails"
+    
+    id = db.Column(db.Integer, primary_key=True)
+    from_address = db.Column(db.String(255), nullable=False)
+    to_addresses = db.Column(db.Text, nullable=False) 
+    cc_addresses = db.Column(db.Text, nullable=True)  
+    bcc_addresses = db.Column(db.Text, nullable=True) 
+    subject = db.Column(db.String(255), nullable=False)
+    content = db.Column(db.Text, nullable=False)
+    sent_at = db.Column(db.DateTime, default=datetime.utcnow)
+    is_deleted = db.Column(db.Boolean, default=False)
+    
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'from': self.from_address,
+            'to': self.to_addresses,
+            'cc': self.cc_addresses,
+            'bcc': self.bcc_addresses,
+            'subject': self.subject,
+            'content': self.content,
+            'sent_at': self.sent_at.isoformat() if self.sent_at else None,
+            'deleted': self.is_deleted
+        }
+
 class Contact(db.Model):
     __tablename__ = 'contacts'
     
@@ -305,15 +331,6 @@ def init_app(app):
     if database_url:
         app.config['SQLALCHEMY_DATABASE_URI'] = database_url
         app.logger.info('Using PostgreSQL database')
-        
-        from app.utils.db_connection_manager import configure_connection_pool, register_db_shutdown_handlers
-        
-        app.config.setdefault('DB_POOL_SIZE', 5)
-        app.config.setdefault('DB_MAX_OVERFLOW', 10)
-        app.config.setdefault('DB_POOL_TIMEOUT', 30)
-        app.config.setdefault('DB_POOL_RECYCLE', 280)
-        
-        configure_connection_pool(app)
     else:
         sqlite_path = app.config.get('DATABASE', 'sqlite:///instance/blog.sqlite')
         if sqlite_path.startswith('sqlite:///'):
@@ -327,9 +344,10 @@ def init_app(app):
     db.init_app(app)
     app.cli.add_command(init_db_command)
     
-    if database_url:
-        conn_manager = register_db_shutdown_handlers(app, db)
-        app.extensions['db_connection_manager'] = conn_manager
+    @app.teardown_appcontext
+    def shutdown_db_session(exception=None):
+        if hasattr(db, 'session') and db.session:
+            db.session.remove()
     
     app.teardown_appcontext(close_db)
     

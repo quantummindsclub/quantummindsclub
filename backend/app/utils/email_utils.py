@@ -4,8 +4,7 @@ from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 from flask import current_app
 from datetime import datetime
-from app.models.email import SentEmail
-from app.models.database import db
+from app.models.database import db, SentEmail
 
 def send_email(recipient_list, subject, html_content, sender_email=None, sender_password=None, cc_list=None, bcc_list=None, store_record=True):
     try:

@@ -1,6 +1,5 @@
 from flask import request, jsonify
-from app.models.database import db
-from app.models.email import SentEmail
+from app.models.database import db, SentEmail
 from app.utils.email_utils import send_email
 import os
 from . import bp

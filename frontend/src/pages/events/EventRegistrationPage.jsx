@@ -35,7 +35,7 @@ const EventRegistrationPage = () => {
     phone: '',
     department: '',
     academic_year: '',
-    college_code: '',
+    college_code: 'UCER',
     student_id: '',
   });
   const [submitting, setSubmitting] = useState(false);
@@ -64,7 +64,7 @@ const EventRegistrationPage = () => {
         phone: '',
         department: '',
         academic_year: '',
-        college_code: '',
+        college_code: 'UCER',
         student_id: '',
       });
       toast({
@@ -294,7 +294,7 @@ const EventRegistrationPage = () => {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="phone">Phone Number (Optional)</Label>
+              <Label htmlFor="phone">Phone Number</Label>
               <Input
                 id="phone"
                 name="phone"
@@ -316,7 +316,9 @@ const EventRegistrationPage = () => {
                     <SelectValue placeholder="Select department" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="CSIT/AIML">CSIT/AIML</SelectItem>
+                    <SelectItem value="CSE">CSE</SelectItem>
+                    <SelectItem value="IT">IT</SelectItem>
+                    <SelectItem value="AIML">AIML</SelectItem>
                     <SelectItem value="ME">ME</SelectItem>
                     <SelectItem value="EE">EE</SelectItem>
                     <SelectItem value="ECE">ECE</SelectItem>
@@ -352,9 +354,9 @@ const EventRegistrationPage = () => {
                   id="college_code"
                   name="college_code"
                   value={formState.college_code}
-                  onChange={handleChange}
-                  placeholder="Enter your college code"
-                  required
+                  disabled
+                  readOnly
+                  className="bg-muted"
                 />
               </div>
 

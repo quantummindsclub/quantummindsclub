@@ -1,6 +1,6 @@
 from flask import Blueprint
 
-bp = Blueprint('pages', __name__)
+bp = Blueprint('health', __name__)
 
 from . import routes
 

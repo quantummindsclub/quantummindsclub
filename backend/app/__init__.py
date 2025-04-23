@@ -34,9 +34,6 @@ def create_app(config_name='default'):
     
     init_db_app(app)
     
-    from app.utils.shutdown_handler import install_signal_handlers
-    install_signal_handlers(app)
-    
     from app.api import register_api_blueprints
     register_api_blueprints(app)
     
