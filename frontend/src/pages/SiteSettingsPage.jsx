@@ -77,7 +77,6 @@ const SiteSettingsPage = () => {
           newUsername: adminData.username || ''
         }))
       } catch (error) {
-        console.error('Error fetching data:', error)
         toast({
           variant: "destructive",
           title: "Error",
@@ -140,7 +139,6 @@ const SiteSettingsPage = () => {
       }, 500)
       
     } catch (error) {
-      console.error('Error saving settings:', error)
       toast({
         variant: "destructive",
         title: "Error",
@@ -239,11 +237,10 @@ const SiteSettingsPage = () => {
       })
       
     } catch (error) {
-      console.error('Error changing password:', error.message)
       toast({
         variant: "destructive",
         title: "Error",
-        description: error.message || "Failed to change password. Please try again.",
+        description: "Failed to change password. Please try again.",
       })
     } finally {
       setIsChangingPassword(false)
@@ -326,7 +323,6 @@ const SiteSettingsPage = () => {
       }))
       
     } catch (error) {
-      console.error('Error changing username:', error.message)
       toast({
         variant: "destructive",
         title: "Error",

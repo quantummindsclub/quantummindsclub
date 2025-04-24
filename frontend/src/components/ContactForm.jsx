@@ -95,7 +95,6 @@ const ContactForm = () => {
       });
       
     } catch (error) {
-      console.error('Error submitting contact form:', error);
       toast({
         variant: "destructive",
         title: "Error",

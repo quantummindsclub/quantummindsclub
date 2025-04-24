@@ -37,7 +37,6 @@ const Comments = ({ postId, postSlug, commentsEnabled = true }) => {
         const data = await response.json();
         setComments(data);
       } catch (error) {
-        console.error('Error fetching comments:', error);
         toast({
           variant: "destructive",
           title: "Error",
@@ -120,7 +119,6 @@ const Comments = ({ postId, postSlug, commentsEnabled = true }) => {
       });
       
     } catch (error) {
-      console.error('Error posting comment:', error);
       toast({
         variant: "destructive",
         title: "Error",
@@ -147,7 +145,6 @@ const Comments = ({ postId, postSlug, commentsEnabled = true }) => {
       });
       
     } catch (error) {
-      console.error('Error deleting comment:', error);
       toast({
         variant: "destructive",
         title: "Error",

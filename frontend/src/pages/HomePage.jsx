@@ -54,7 +54,6 @@ const HomePage = () => {
           alt: image.title || 'Gallery image'
         }));
       } catch (error) {
-        console.error('Failed to load gallery images:', error);
         return visualJourneyImages;
       }
     },

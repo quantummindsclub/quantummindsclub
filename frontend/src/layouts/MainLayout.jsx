@@ -25,7 +25,6 @@ const MainLayout = () => {
         
         if (!response.ok) {
           if (response.status === 429) {
-            console.warn('Rate limit hit for social URLs API, using defaults')
             return
           }
           throw new Error('Failed to fetch social URLs')
@@ -34,7 +33,7 @@ const MainLayout = () => {
         const data = await response.json()
         setSocialUrls(data)
       } catch (error) {
-        console.error('Error fetching social URLs:', error)
+        // removed console.error
       } finally {
         setLoading(false)
       }

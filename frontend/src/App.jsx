@@ -40,10 +40,11 @@ function App() {
       <AuthProvider>
         <ScrollToTop />
         <Routes>
+          <Route path="login" element={<LoginPage />} />
+          
           <Route path="/" element={<MainLayout />}>
             <Route index element={<HomePage />} />
             <Route path="about" element={<AboutPage />} />
-            <Route path="login" element={<LoginPage />} />
             <Route path="post/:slug" element={<PostPage type="blog" />} />
             <Route path="all" element={<AllPostsPage />} />
             <Route path=":slug" element={<PostPage type="page" />} />

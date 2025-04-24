@@ -102,7 +102,6 @@ const BlogEditor = ({ pageData = null, isNew = false }) => {
       
       navigate(isBlog ? '/manage' : `/post/${savedData.slug}`)
     } catch (error) {
-      console.error('Save error:', error)
       toast({
         variant: "destructive",
         title: "Error",

@@ -844,7 +844,6 @@ const TipTapEditor = ({ content, onChange, placeholder = "Write your content her
           description: "Image has been successfully uploaded and inserted.",
         })
       } catch (error) {
-        console.error('Upload error:', error)
         toast({
           variant: "destructive",
           title: "Upload Failed",

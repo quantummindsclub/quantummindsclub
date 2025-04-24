@@ -55,8 +55,15 @@ const ManagePages = () => {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['posts'] });
       toast({
-        title: "Deleted Successfully",
-        description: "The content has been deleted.",
+        title: "Page Deleted",
+        description: "The page has been deleted.",
+      });
+    },
+    onError: (error) => {
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: error.message || "Failed to delete page.",
       });
     }
   });
@@ -85,7 +92,6 @@ const ManagePages = () => {
     try {
       await deleteMutation.mutateAsync(pageToDelete.slug);
     } catch (error) {
-      console.error('Delete error:', error)
       toast({
         variant: "destructive",
         title: "Delete Failed",

@@ -46,7 +46,6 @@ const EditEventPage = ({ isNew = false }) => {
           setIsLoading(false);
         })
         .catch(error => {
-          console.error("Error fetching event:", error);
           setLoadError(error.message);
           setIsLoading(false);
           toast({

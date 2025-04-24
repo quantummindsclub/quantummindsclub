@@ -46,6 +46,13 @@ const ManageTeamMembersPage = () => {
         title: "Member Deleted",
         description: "Team member has been removed.",
       });
+    },
+    onError: (error) => {
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: error.message || "Failed to delete team member.",
+      });
     }
   });
 
@@ -58,7 +65,6 @@ const ManageTeamMembersPage = () => {
     try {
       await deleteMutation.mutateAsync(memberToDelete.id)
     } catch (error) {
-      console.error('Delete error:', error)
       toast({
         variant: "destructive",
         title: "Delete Failed",

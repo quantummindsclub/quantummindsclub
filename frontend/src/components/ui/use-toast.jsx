@@ -135,11 +135,6 @@ function toast({ ...props }) {
       update,
     }
   } else {
-    if (props.variant === 'destructive') {
-      console.error('[Toast]', props.title || '', props.description || '')
-    } else {
-      console.log('[Toast]', props.title || '', props.description || '')
-    }
     return { id: null, dismiss: () => {}, update: () => {} }
   }
 }
