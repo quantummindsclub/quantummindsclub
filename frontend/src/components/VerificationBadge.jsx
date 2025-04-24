@@ -7,7 +7,7 @@ const VerificationBadge = () => {
       <div className="bg-green-600 text-white p-1 rounded-full flex items-center justify-center h-6 w-6">
         <Check className="h-4 w-4" strokeWidth={3} />
       </div>
-      <span className="text-sm font-medium text-green-700 dark:text-green-500">Verified</span>
+      <span className="text-sm font-medium">Verification Completed</span>
     </div>
   );
 };
