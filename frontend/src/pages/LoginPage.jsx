@@ -6,7 +6,6 @@ import { Input } from '../components/ui/input'
 import { Label } from '../components/ui/label'
 import { useToast } from '../components/ui/use-toast'
 import CaptchaWidget from '../components/CaptchaWidget'
-import VerificationBadge from '../components/VerificationBadge'
 
 const LoginPage = () => {
   const [username, setUsername] = useState('')
@@ -82,15 +81,9 @@ const LoginPage = () => {
             />
           </div>
           
-          {!turnstileToken ? (
-            <div className="my-4 w-full">
-              <CaptchaWidget onVerify={handleCaptchaVerify} />
-            </div>
-          ) : (
-            <div className="my-4 w-full flex justify-center">
-              <VerificationBadge />
-            </div>
-          )}
+          <div className="my-4 w-full">
+            <CaptchaWidget onVerify={handleCaptchaVerify} />
+          </div>
           
           <Button 
             type="submit" 
