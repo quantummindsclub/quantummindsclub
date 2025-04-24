@@ -6,6 +6,7 @@ import { Input } from '../components/ui/input'
 import { Label } from '../components/ui/label'
 import { useToast } from '../components/ui/use-toast'
 import CaptchaWidget from '../components/CaptchaWidget'
+import VerificationBadge from '../components/VerificationBadge'
 
 const LoginPage = () => {
   const [username, setUsername] = useState('')
@@ -51,7 +52,7 @@ const LoginPage = () => {
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-background px-4">
-      <div className="w-full max-w-md px-4 py-12 border login-card rounded-lg shadow-sm bg-card">
+      <div className="w-full max-w-md px-4 py-12 border login-card rounded-lg shadow-sm bg-card mt-[-10px]">
         <h1 className="text-2xl font-bold text-center mb-6">Login</h1>
         
         <form onSubmit={handleSubmit} className="space-y-4">
@@ -81,9 +82,15 @@ const LoginPage = () => {
             />
           </div>
           
-          <div className="my-4 w-full">
-            <CaptchaWidget onVerify={handleCaptchaVerify} />
-          </div>
+          {!turnstileToken ? (
+            <div className="my-4 w-full">
+              <CaptchaWidget onVerify={handleCaptchaVerify} />
+            </div>
+          ) : (
+            <div className="my-4 w-full flex justify-center">
+              <VerificationBadge />
+            </div>
+          )}
           
           <Button 
             type="submit" 
