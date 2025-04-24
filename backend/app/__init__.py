@@ -5,7 +5,6 @@ from flask_session import Session
 from redis import Redis
 from .config import config
 from app.models.database import init_app as init_db_app
-from app.utils.limiter_utils import init_limiter
 
 def create_app(config_name='default'):
     app = Flask(__name__, instance_relative_config=True)
@@ -30,12 +29,10 @@ def create_app(config_name='default'):
             password=app.config['SESSION_REDIS_PASSWORD'],
             ssl=app.config['SESSION_REDIS_SSL']
         )
-        app.logger.info(f"Configured Redis session storage with host: {app.config['SESSION_REDIS_HOST']}")
+        app.logger.info("UpStash configured for session storage")
     
     Session(app)
-    
-    init_limiter(app)
-    
+        
     @app.after_request
     def add_vary_header(response):
         if 'Origin' not in response.headers.get('Vary', ''):

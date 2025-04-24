@@ -23,6 +23,8 @@ class Config:
     SESSION_REDIS_SSL = os.environ.get('REDIS_SSL', 'False').lower() == 'true'
     SESSION_USE_SIGNER = True
 
+    TURNSTILE_SECRET_KEY = os.environ.get("TURNSTILE_SECRET_KEY")
+
 class DevelopmentConfig(Config):
     DEBUG = True
     DATABASE = os.path.join('instance', 'app.sqlite')

@@ -60,19 +60,12 @@ export function AuthProvider({ children }) {
     checkAuthStatus()
   }, [checkAuthStatus])
 
-  const login = async (username, password) => {
+  const login = async (username, password, turnstileToken) => {
     try {
-      const response = await apiPost('/api/auth/login', { username, password })
+      const response = await apiPost('/api/auth/login', { username, password, turnstile_token: turnstileToken })
 
       if (!response.ok) {
         const errorData = await response.json();
-        
-        if (response.status === 429) {
-          throw new Error(errorData.error || 'Too many login attempts. Please try again later.');
-        } else if (response.status === 403) {
-          throw new Error(errorData.error || 'Access temporarily blocked for security reasons.');
-        }
-        
         throw new Error(errorData.error || 'Login failed');
       }
 
@@ -87,18 +80,14 @@ export function AuthProvider({ children }) {
       
       return { success: true };
     } catch (error) {
-      const isRateLimited = error.message.includes('too many') || 
-                           error.message.includes('try again later') ||
-                           error.message.toLowerCase().includes('attempt');
-      
       toast({
         variant: "destructive",
-        title: isRateLimited ? "Rate Limited" : "Login Failed",
+        title: "Login Failed",
         description: error.message || "Invalid credentials",
-        duration: isRateLimited ? 5000 : 3000, 
+        duration: 3000, 
       })
       
-      return { success: false, error: error.message, isRateLimited }
+      return { success: false, error: error.message }
     }
   }
 
