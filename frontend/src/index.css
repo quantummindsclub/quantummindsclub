@@ -1472,3 +1472,40 @@ main {
   background-color: transparent !important;
   color: white !important;
 }
+
+/* Turnstile captcha widget styling */
+.captcha-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: transparent;
+  border: none !important;
+  max-width: 100%;
+  overflow: visible;
+}
+
+.turnstile-widget {
+  width: 100%;
+  font-family: 'Space Mono', monospace !important;
+}
+
+/* Remove rounded corners from Turnstile iframe */
+.captcha-container iframe {
+  border-radius: 0 !important;
+  border: 1px solid hsl(var(--border)) !important;
+  background-color: hsl(var(--background));
+}
+
+/* Make sure Turnstile container respects theme */
+.dark .captcha-container iframe {
+  background-color: hsl(var(--card));
+  border-color: hsl(var(--border)) !important;
+}
+
+/* Fix for Turnstile in different viewport sizes */
+@media (max-width: 360px) {
+  .captcha-container {
+    transform: scale(0.9);
+    transform-origin: center;
+  }
+}

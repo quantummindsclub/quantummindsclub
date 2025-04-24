@@ -1,10 +1,32 @@
 import { Turnstile } from '@marsidev/react-turnstile';
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import { useTheme } from '../components/theme-provider';
 
 const TURNSTILE_SITE_KEY = import.meta.env.VITE_TURNSTILE_SITE_KEY;
 
 const CaptchaWidget = ({ onVerify }) => {
   const containerRef = useRef(null);
+  const { theme } = useTheme();
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  useEffect(() => {
+    if (!containerRef.current) return;
+    
+    const observer = new MutationObserver(() => {
+      const iframe = containerRef.current?.querySelector('iframe');
+      if (iframe) {
+        observer.disconnect();
+      }
+    });
+    
+    observer.observe(containerRef.current, { childList: true, subtree: true });
+    
+    return () => observer.disconnect();
+  }, []);
 
   const handleVerify = (token) => {
     if (onVerify) {
@@ -16,21 +38,20 @@ const CaptchaWidget = ({ onVerify }) => {
     <div className="w-full flex justify-center my-4">
       <div 
         ref={containerRef}
-        className="captcha-container overflow-visible" 
-        style={{ 
-          minWidth: '300px',  
-          maxWidth: '100%',
-          margin: '0 auto'
-        }}
+        className="captcha-container"
       >
-        <Turnstile
-          siteKey={TURNSTILE_SITE_KEY}
-          options={{
-            size: 'normal',
-            theme: 'light'
-          }}
-          onSuccess={handleVerify}
-        />
+        {mounted && (
+          <Turnstile
+            siteKey={TURNSTILE_SITE_KEY}
+            options={{
+              size: 'normal',
+              theme: theme === 'dark' ? 'dark' : 'light',
+              appearance: 'always'
+            }}
+            onSuccess={handleVerify}
+            className="turnstile-widget"
+          />
+        )}
       </div>
     </div>
   );
